@@ -35,3 +35,11 @@ ls [ab]*
 tampilkan file yang dimulai dengan salah satu karakter a atau b
 ```
 
+# Simple Bash Script
+Buat file, ubah permision menjadi +x dan tulis script
+```
+touch testing.sh && chmod +x testing.sh && pico testing.sh
+
+#!/bin/bash
+echo "Hello, apa khabar"
+```
