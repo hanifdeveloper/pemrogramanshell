@@ -1,0 +1,305 @@
+24 Perintah Linux Terminal / Command Linux Untuk Pemula — Linux adalah sistem operasi yang sangat erat dengan penggunaan terminal, karena kebanyakan orang menggunakan linux memang untuk keperluan sistem administrasi, sistem operasi linux ini banyak digunakan sebagai server, website anda pun kemungkinan di hosting pada sebuah server yang menggunakan linux.
+
+Oleh karena itu jika anda adalah seorang pengguna Linux pemula, maka anda harus memahami dasar-dasar perintah yang ada di linux, mungkin akan sedikit sulit di awal, namun setelah terbiasa maka bisa jadi anda akan selalu bermain dengan command di linux dan tidak menginginkan lagi tampilan visual (GUI) dari Linux lagi.
+
+command linux
+
+Beberapa teman yang sering bermain dengan terminal linux ternyata memang akhirnya lebih senang bermain-main atau menghabiskan waktu untuk mengelola website melalui terminal dibandingkan dengan tampilan visual linux, mereka beranggapan atau mengaanggap bahwa bekerja dengan terminal linux lebih mempercepat pekerjaan mereka dibanding dengan visual.
+
+Baca juga: 
+
+    Panduan Membeli Laptop Untuk Linux
+    10 Web Browser Untuk Sistem Operasi Linux
+
+Berikut ini adalah beberapa contoh command Linux yang bisa anda pelajari dan coba untuk di praktekan langsung di terminal linux anda.
+1. grep command
+
+Mencari string tertentu dalam sebuah file (case in-sensitive search)
+
+$ grep -i "the" file_demo
+
+Mencetak garis yang cocok dengan apa yang dicari
+
+grep -A 3 -i "contoh" text_demo
+
+Mencari string yang diberikan dalam semua file secara rekursif
+
+$ grep -r "jurnalweb" *
+
+2. tar command
+
+Tar ini adalah untuk membuat file yang di kompress, saya seperti zip atau rar.
+
+Membuat file arsip baru
+
+$ tar cvf nama_file_arsip.tar namadirektori/
+
+Mengekstrak file tar
+
+$ tar xvf nama_arsip.tar
+
+Melihat file tar
+
+$ tar tvf nama_arsip.tar
+
+3. find command
+
+Mencari file berdasarkan nama file (case-sensitive)
+
+# find -iname "MyCProgram.c"
+
+Perintah untuk mengeksekusi file yang ditemukan berdasarkan perintah find
+
+$ find -iname "MyCProgram.c" -exec md5sum {} \;
+
+Mencari semua file kosong/empty pada folder/direktori home
+
+# find ~ -empty
+
+4. ssh command
+
+Login ke sebuah host secara remote
+
+ssh -l johndoe remotehost.example.com
+
+Debug SSH client
+
+ssh -v -l johndoe remotehost.example.com
+
+Menampilkan versi SSH Client
+
+$ ssh -V
+OpenSSH_3.9p1, OpenSSL 0.9.7a Feb 19 2003
+
+5. sed command
+
+Ketika anda mencopy file DOS ke Linux, kamu akan menemukan \r\n disetiap baris. Contoh ini mengubah format file DOS ke format Unix menggunakan perintah sed.
+
+$sed 's/.$//' filename
+
+Cetak isi file secara terbalik
+
+$ sed -n '1!G;h;$p' jurnalweb.txt
+
+Tambahkan nomor baris untuk semua baris yang tidak kosong dalam sebuah file
+
+$ sed '/./=' jurnalweb.txt | sed 'N; s/\n/ /'
+
+6. awk command
+
+Menghapus duplikasi file menggunakan perintah awk
+
+$ awk '!($0 in array) { array[$0]; print }' temp
+
+Cetak semua baris dari /etc/passwd yang memiliki uid dan gid sama
+
+$awk -F ':' '$3==$4' passwd.txt
+
+Mencetak field tertentu dari sebuah file
+
+$ awk '{print $2,$5;}' karyawan.txt
+
+7. sort command
+
+Sort / Mengurutkan file secara ascending (dari terkecil ke besar)
+
+$ sort names.txt
+
+Sort/Mengurutkan secara descending (dari besar ke kecil)
+
+$ sort -r names.txt
+
+Menampilkan file passwd berdasarkan kolom ke-3
+
+$ sort -t: -k 3n /etc/passwd | more
+
+8. export command
+
+Melihat environtment variabel yang terkait oracle
+
+$ export | grep ORACLE
+declare -x ORACLE_BASE="/u01/app/oracle"
+declare -x ORACLE_HOME="/u01/app/oracle/product/10.2.0"
+declare -x ORACLE_SID="med"
+declare -x ORACLE_TERM="xterm"
+
+Mengekpor sebuah environtment variabel
+
+$ export ORACLE_HOME=/u01/app/oracle/product/10.2.0
+
+9. xargs command
+
+Memindahkan semua file gambar ke hardisk eksternal
+
+# ls *.jpg | xargs -n1 -i cp {} /external-hard-drive/directory
+
+Mencari semua file gambar JPG di sistem dan kompres file-file tersebut
+
+# find / -name *.jpg -type f -print | xargs tar -cvzf images.tar.gz
+
+Download semua URL yang dituliskan di dalam file url-list.txt
+
+# cat url-list.txt | xargs wget –c
+
+10. ls command
+
+Display filesize in human readable format (e.g. KB, MB etc.,)
+
+$ ls -lh
+-rw-r----- 1 johndoe team-dev 8.9M Jun 12 15:27 arch-linux.txt.gz
+
+Urutkan File Berdasarkan Perubahan Waktu Terakhir (Pada Reverse Order) Menggunakan ls -ltr
+
+$ ls -ltr
+
+Klasifikasi visual File Dengan Menggunakan Karakter Khusus ls -F
+
+$ ls -F
+
+11. cd command
+
+Gunakan “cd -” untuk beralih antara dua direktori terakhir
+
+Berpindah ke direktori jurnal
+
+cd jurnal
+
+kembali ke direktori sebelumnya
+
+cd ..
+
+Berpindah ke direktori home user anda
+
+~ /
+
+12. mkdir command
+
+Membuat folder jurnalweb dengan perintah mkdir
+
+mkdir jurnalweb
+
+13. cp command
+
+Menduplikasi / copy file dengan perintah cp
+
+cp nama_file.txt nama_file_baru.txt
+
+14. gedit command
+
+Untuk membuka file agar bisa di ubah-ubah dengan gedit
+
+gedit nama_file.txt
+
+17. mv command
+
+Memindahkan sebuah folder ke lokasi berbeda dengan perintah mv
+
+mv direktori_atau_file direktori_atau_file_baru
+18. rm command
+
+Menghapus file dengan perintah rm
+
+rm file
+
+Menghapus direktori folder dengan perintah rm
+
+rm -r direktori
+
+19. pwd command
+
+Perintah pwd akan mencetak/memberi informasi lokasi folder anda berada saat ini
+
+pwd
+
+20. gzip command
+
+Membuat sebuah file kompres dengan formal .gzip
+
+$ gzip test.txt
+
+Uncompress / Ekstrak sebuah file .gzip
+
+$ gzip -d test.txt.gz
+
+Menampilkan rasio kompresi dari sebuah file yang sudah di kompres dengan perintah gzip -l
+
+$ gzip -l *.gz
+         compressed        uncompressed  ratio uncompressed_name
+              23709               97975  75.8% asp-patch-rpms.txt
+
+21. bzip2 command
+
+Membuat file kompres dengan format .bzip2
+
+$ bzip2 test.txt
+
+Mengekstrak / uncompress sebuah file dengan format .bzip2
+
+bzip2 -d test.txt.bz2
+
+22. unzip command
+
+Untuk mengekstrak sebuah file dengan format .zip
+
+$ unzip my_file.zip
+
+Meliha isi file zip tanpa mengekstrak nya
+
+$ unzip -l my_file.zip
+Archive:  my_file.zip
+  Length     Date   Time    Name
+ --------    ----   ----    ----
+    40995  11-30-98 23:50   META-INF/MANIFEST.MF
+    32169  08-25-98 21:07   classes_
+    15964  08-25-98 21:07   classes_names
+    10542  08-25-98 21:07   classes_ncomp
+
+22. shutdown command
+
+Matikan / shutdown sistem dan matikan daya komputer secara langsung atau segera
+
+# shutdown -h now
+
+Metikan / shutdown sistem setelah 10 menit
+
+# shutdown -h +10
+
+Restart sistem menggunakan perindah shutdown
+
+# shutdown -r now
+
+Memaksa pemeriksaan filesystem saat reboot.
+
+# shutdown -Fr now
+
+23. ftp command
+
+Dua perintah ftp dan secure ftp (sftp) memiliki perintah yang sama, yaitu untuk menghubungkan anda dengan server dan mendownload beberapa file
+
+$ ftp IP/hostname
+ftp> mget *.html
+
+Melihat nama-nama file yang terletak di server remote sebelum mendownload dengan merintah mls
+
+ftp> mls *.html -
+/ftptest/features.html
+/ftptest/index.html
+/ftptest/othertools.html
+/ftptest/samplereport.html
+/ftptest/usage.html
+
+24. ps command
+
+Perintah ps digunakan untuk menampilkan informasi tentang proses yang sedang berjalan di sistem.
+
+Meskipun ada banyak argumen yang dapat dilewatkan ke perintah ps, berikut adalah beberapa yang umum.
+
+Untuk melihat proses yang berjalan saat ini.
+
+$ ps -ef | more
+
+Untuk melihat proses yang berjalan saat ini dalam struktur pohon. Pilihan H singkatan hirarki proses.
+
+$ ps -efH | more
+
+Itulah beberapa perintah linux yang bisa di pelajari dan langsung di praktekan oleh pemula linux agar semakin mahir dalam menggunakan perintah-perintah yang bisa digunakan di Linux.
