@@ -1,0 +1,102 @@
+
+Sed dan AWK, Dua Perintah Linux Favorit
+Rizky November 28, 2017 0
+Tulisan kali ini membahas tentang sed dan AWK. Mengapa dua perintah ini menjadi favorit saya? Karena dua perintah ini mempunyai peranan yang sangat banyak dalam menunjang dan memudahkan pekerjaan sehari-hari saya.
+
+Sekilas tentang sed. Apa itu sed? sed adalah stream editor. Mungkin selama ini kita hanya terbiasa memakai text editor semisal Notepad (Windows), sed sangat jauh berbeda daripada itu. sed adalah stream editor. sed tidak langsung mengedit text file (.txt), tetapi sed mengedit teks yang belum menjadi file.
+
+Lalu apa kegunaan sed? Karena sed adalah stream editor, maka sed ini sangat luas pemakaiannya terutama digunakan dengan antarmuka CLI (Command Line Interface). Namun perlu digaris bawahi, kemampuan sed lebih dari sekedar itu. sed itu bisa menyunting text file bahkan sed bisa menyunting command line, sed juga bisa digunakan berbarengan dengan program konsol lainnya dan masih banyak lagi kegunaannya.
+
+Salah satu kelebihan sed jika dibandingkan dengan text editor semacam Notepad yaitu, sed bisa digunakan untuk mengedit banyak file sekaligus dalam waktu yang sama. AMAZING! 😀
+
+Mari kita masuk ke contoh penggunaan perintah sed. Anggaplah kita memiliki teks file dengan nama latihan_sed.txt sebagai berikut:
+
+Windows Linux Mac BSD
+Wadagizig Wao WWW WOW
+Ani Budi Rani Sandi
+Belajar Bahasa Bahasa Belajar
+
+
+Sekarang kita akan mengedit file latihan_sed.txt diatas.
+
+Contoh 1:
+sed 's/W/ /' latihan_sed.txt
+sed 's/W/ /g' latihan_sed.txt
+
+Hasilnya adalah sebagai berikut:
+
+
+Penjelasan Contoh 1:
+sed memiliki command 's', lalu command ini memiliki tambahan yang disebut flag 'g'. Dapat kita perhatikan antara perintah sed tanpa 'g' dengan memakai 'g', output yang dihasilkan tampak berbeda.
+
+    Tanpa 'g', maka sed akan melakukan substitusi hanya pada kolom pertama yang dia temukan.
+    Dengan 'g' maka sed akan melakukan substitusi pada seluruh kolom di dalam satu baris. Dapat kita lihat pada kata yang mempunyai huruf 'W' kapital berubah semuanya menjadi spasi. 'g' disini berarti global, artinya sed akan melakukan subtitusi pada semua kata yang mempunyai huruf 'W' kapital seperti pada contoh diatas.
+
+
+Contoh 2:
+sed -i 's/W/[SED]/g' latihan_sed.txt
+sed 'r' latihan_sed.txt
+
+Hasilnya adalah sebagai berikut:
+
+
+Penjelasan Contoh 2:
+
+    'i' merupakan input files, dengan 'i' sed akan melakukan perubahan dan sekaligus menyimpannya. Dua pekerjaan terselesaikan hanya dengan satu perintah.
+    'r' merupakan read, sama halnya dengan perintah cat.
+
+
+Contoh 3:
+Contoh kali ini merupakan bagian dari perintah sed paling favorit bagi saya, yaitu membersihkan tag HTML dengan sed.
+Anggaplah kita mempunyai file HTML dengan nama latihan_sed.html sebagai berikut:
+
+sumber: disunting dari https://www.lipsum.com
+
+Lantas bagaimana jika hendak mengambil teksnya saja? apakah harus menghapusnya satu persatu? PR sekali! 😀
+Dengan sed pekerjaan tersebut tidaklah sulit, silahkan eksekusi perintah dibawah ini:
+sed -n '/^$/!s/<[^>]*>/ /g;p;' latihan_sed.html
+
+Hasilnya adalah sebagai berikut:
+
+
+
+Bagaimana? powerfull bukan 😀
+Oke cukup dulu bahasan mengenai sed, selengkap nya Anda bisa melihat dokumentasinya di laman sed, a stream editor.
+
+Selanjutnya adalah AWK, disini penulis tidak akan membahas banyak mengenai AWK melainkan perintah dasarnya saja dan fungsi kalkulasi dengan AWK. Berikut ini merupakan contoh file gaji.txt:
+
+
+Kiky Pelaksana Sisa Gaji = 3150
+Upryek Pelaksana Sisa Gaji = 3060
+Suryo Kepala Sisa Gaji = 9000
+Jonat Wakil Sisa Gaji = 7650
+Lucky Asisten Sisa Gaji = 6300
+
+
+Contoh 1:
+awk '{print $3}' gaji.txt
+
+Hasilnya adalah sebagai berikut:
+
+
+Penjelasan Contoh 1:
+$3 merupakan kolom ke-3 dari setiap baris, hal ini juga dapat dilakukan untuk perintah yang sama pada kolom ke-1 dan ke-2.
+
+Contoh 2:
+awk '{ sisaGaji = $3 - $4
+  print $1,$2,"Sisa Gaji = "sisaGaji }' gaji.txt
+
+Hasilnya adalah sebagai berikut:
+
+    Kiky Pelaksana Sisa Gaji = 3150
+    Upryek Pelaksana Sisa Gaji = 3060
+    Suryo Kepala Sisa Gaji = 9000
+    Jonat Wakil Sisa Gaji = 7650
+    Lucky Asisten Sisa Gaji = 6300
+
+
+Oke, selesai sudah bahasan kita kali ini, untuk AWK selengkapnya bisa dilihat pada dokumentasinya di The GNU Awk User’s Guide
+Terima kasih dan selamat malam.
+
+Referensi:
+https://www.gnu.org/software/
