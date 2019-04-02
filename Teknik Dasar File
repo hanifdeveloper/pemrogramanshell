@@ -1,0 +1,258 @@
+
+Belajar Linux Dasar - Manajemen file
+Published by Dhani Setiawan on Mon 02 May 2016
+Filed under: Linux Padawan Tags: Linux
+Linux CLI
+
+Tulisan ini menyambung artikel sebelumnya, Belajar Linux Dasar - Pengenalan Input & Ouput.
+
+Penggunaan program-program di artikel ini dibuat sederhana dengan maksud supaya para pengguna Linux yang baru, atau yang belum familiar dengan terminal bisa langsung ketik perintah tanpa harus membaca manual yang panjang dan boring lengkap itu. Kalau sudah sedikit ngerti baru baca manual lengkapnya, atau istilahnya RTFM (Read The F[ine] Manual).
+
+Di artikel ini saya tuliskan tentang manajemen file, bagaimana cara membuat, rename, copy, cut, dan hapus file.
+
+ 
+
+Beberapa program yang dipakai:
+
+    ls, Untuk listing file dan direktori.
+    mkdir, Dipakai untuk membuat direktori baru.
+    touch, Update timestamp atau buat file baru.
+    mv, Move (cut + paste) dan rename file.
+    cp, Copy file dan direktori.
+    rm, Hapus file dan direktori.
+    ln, Untuk membuat link.
+
+Di penulisan penggunaan program (synopsis), saya mengikuti Linux manual. Jadi argumen program di antara tanda [ dan ] bersifat opsional.
+
+ 
+ls
+
+ls dipakai untuk me-list nama-nama file dan direktori plus atributnya.
+Synopsis
+
+ls [OPTION] [FILE]
+
+ls kalau tidak disuplai argumen apa-apa akan me-list nama-nama file di current directory, working atau current directory bisa dilihat dengan perintah pwd. File atau folder hidden dengan nama berawalan . (dot) juga tidak di-print kecuali ada argumen -a (all).
+
+Contoh
+Untuk me-listing file dan direktori di current directory, ketik ls tanpa argumen apa-apa.
+
+ls
+
+Output dengan perintah ls di atas semua file terlihat sama, kita tidak bisa bedakan mana file mana folder, berapa besar file-nya, dsb.
+
+Tergantung program terminal dan environmentnya, biasanya output ls ada warna-warna untuk membedakan tipe file, kalau tidak ada warna, coba ini:
+
+ls --color
+
+Biarpun sudah dibedakan dengan warna, tetap tidak ada informasi kapan file-file itu terahir kali diakses, atau berapa ukurannya, atau siapa pemilik file itu. Supaya ls ada output informasi itu, pakai argumen -l.
+
+ls -l --color
+
+Untuk list file dan direktori yang bukan di current directory, folder /tmp misalnya
+
+ls /tmp
+
+Sudah dijelaskan di atas kalau file hidden dengan nama berawalan . (dot) tidak diprint, pakai argumen -a (all) kalau mau print termasuk yang hidden.
+
+ls -a ~
+
+Dua atau lebih argumen bisa dijadikan satu, misalnya untuk list atribut file termasuk yang hidden.
+
+ls -la ~/
+
+ 
+mkdir
+
+mkdir dipakai untuk buat file direktori baru. saya sebut file karena memang di Unix dan Linux, direktori itu file, sama seperti file umumnya.
+Cara pakai mkdir:
+
+mkdir [OPTIONS] DIRECTORY
+
+OPTIONS di sini opsional, boleh tidak dipakai. DIRECTORY adalah nama direktori yang mau dibuat.
+
+Contoh
+Membuat direktori blah di current directory:
+
+mkdir blah
+
+Membuat direktori blah dengan absolute path.
+
+mkdir /tmp/blah
+
+Kalau kita mau buat direktori baru, sekalian buat juga parent directory-nya kalau belum ada, kita bisa pakai argumen -p (parent).
+
+mkdir -p blah/blah1/blah2/blah3
+
+Dengan -p, mkdir tidak akan error kalau direktori yang dimaksud sudah ada.
+Perintah di atas itu untuk buat direktori blah3, kalau direktori parent-nya blah2 belum ada, maka dibuat juga. Begitu juga kalau folder blah dan blah1 belum ada, maka akan dibuat juga.
+
+Kalau kita mau buat banyak direktori baru, tidak perlu ketik perintah satu-satu.
+
+mkdir {blah, blah1, blah2}
+
+Perintah ini untuk buat direktori blah, blah1, dan blah2 di current directory. Sebenarnya tanda { dan } bukan fitur mkdir, tapi Linux shell.
+
+ 
+touch
+
+touch dipakai untuk modifikasi timestamp, atau buat file baru kalau file yang dimaksud tidak ada. Timestamp adalah waktu terakhir file diakses dan dimodifikasi.
+
+Synopsis
+
+touch [OPTION] FILE
+
+Contoh
+
+touch foo
+
+Perintah itu, kalau file foo tidak ada maka dibuat baru, tapi kalau ada maka waktu akses dan modifikasi file yang dirubah. Waktu bisa dilihat dengan perintah ls.
+
+ls -l foo
+
+Tunggu beberapa menit, ulangi perintah touch foo kemudian ls -l foo dan perhatikan perbedaan outputnya.
+
+ 
+mv
+
+mv dipakai untuk rename atau move (cut + paste) file.
+
+Synopsis
+
+mv [OPTION]... [-T] SOURCE DEST
+
+SOURCE adalah file atau direktori asal, dan DEST adalah file atau direktori tujuan.
+
+Contoh
+Rename direktori blah ke blah1
+
+mv blah blah1
+
+Pindahkan direktori blah1 ke /tmp
+
+mv blah1 /tmp
+
+Atau misalnya mau pindahkan blah1 ke /tmp/ dengan nama berbeda, blah2 misalnya
+
+mv blah1 /tmp/blah2
+
+Sangat simpel.
+
+ 
+cp
+
+cp dipakai untuk copy file.
+
+Synopsis
+
+cp [OPTION]... [-T] SOURCE DEST
+
+Penjelasan SOURCE dan DEST sama dengan mv di atas.
+
+Contoh
+Copy file foo ke folder /tmp
+
+cp foo /tmp
+
+Untuk copy foo ke /tmp dengan nama berbeda, foo1 misalnya.
+
+cp foo /tmp/foo1
+
+Copy direktori.
+Untuk copy direktori, gunakan argumen -r (recursive)
+
+cp -r blah /tmp/blah1
+
+Program cp tidak ada output apa-apa kalau sukses, kalau mau print file-file yang dicopy pakai argumen -v (verbose), misalnya:
+
+cp -rv blah /tmp/blah1
+
+ 
+rm
+
+rm dipakai untuk menghapus file dan direktori.
+
+Synopis
+
+rm [OPTION]   FILE
+
+OPTION bersifat opsional, FILE adalah file yang mau dihapus.
+
+Contoh
+Hapus file /tmp/foo
+
+rm /tmp/foo
+
+Hapus direktori dengan option -r (recursive)
+
+rm -r /tmp/blah
+
+Untuk hapus direktori, selain rm -r juga bisa pakai rmdir.
+
+Kadang beberapa file tidak bisa begitu saja dihapus, kita bisa pakai option -f (force) untuk file-file yang susah dihapus.
+
+rm -rf /tmp/blah
+
+ 
+ln
+
+ln dipakai untuk membuat file link.
+
+Di Linux ada file dengan tipe link. Link itu kurang lebih seperti shortcut kalau di Windows.
+
+Jenis link di Linux ada dua, soft link dan hard link. Soft link cara kerjanya kurang lebih seperti shortcut, sedangkan hard link seperti alias.
+
+Soft link biasanya juga disebut dengan symbolic link atau pendeknya symlink.
+
+Penjelasan untuk hard link agak low level, tapi saya akan coba jelaskan sedikit.
+
+Misal saya buat file dengan nama foo, maka file foo ini punya struktur data yang disebut inode, inode ini unik untuk setiap file dan untuk sederhananya inode ini anggap saja nomor.
+
+Misalnya inode untuk file foo itu 100, nah kalau kita buat hard link ke foo dengan nama bar, maka sama saja kita buat file baru dengan nama bar tapi dengan inode 100.
+Kita edit foo maka bar juga berubah, begitu juga sebaliknya. Tapi kalau kita hapus salah satu nama foo misalnya, maka yang terhapus cuma foo, sedangkan inode 100 masih tetap ada, jadinya bar juga masih ada.
+Linux link
+
+File di Linux cuma bisa terhapus kalau nama file untuk inode tertentu jumlahnya sama dengan 0, artinya kalau ada 5 hard link ke satu inode maka untuk benar-benar menghapus file, lima link tersebut harus dihapus.
+Terus lagi hard link tidak bisa cross device, artinya target file untuk link tidak bisa beda partisi atau hard disk, harus sama. Sedangkan symlink tidak ada batasan seperti itu.
+
+Contoh
+Untuk membuat symlink ke file foo dengan nama bar
+
+ln -s foo bar
+
+Dengan symlink atau soft link, kalau kita hapus file target foo, maka bar disebut broken link. bar mengarah ke foo tapi foo tidak ada.
+
+Sedangkan untuk hard link
+
+ln foo bar
+
+Dengan hard link, foo dan bar mengarah ke satu inode jadi seolah-olah file foo dan bar seperti file kembar yang selalu sinkron. Edit foo maka bar berubah, begitu juga sebaliknya. Hapus foo, bar masih bisa diakses.
+
+Demonstrasi penggunaan link dengan hard link.
+
+[dhani: ~] Endor > touch foo
+[dhani: ~] Endor > echo "abcd" > foo
+[dhani: ~] Endor > cat foo
+abcd
+[dhani: ~] Endor > ln foo bar
+[dhani: ~] Endor > cat bar
+abcd
+[dhani: ~] Endor > echo "1234" > bar
+[dhani: ~] Endor > cat foo
+1234
+[dhani: ~] Endor > rm foo
+rm: remove regular file ‘foo’? y
+[dhani: ~] Endor > cat bar
+1234
+[dhani: ~] Endor > rm -f bar
+[dhani: ~] Endor >
+
+ 
+
+Saya rasa program-program ini tidak susah dipahami. Dan kalau perlu memahami lebih lagi tentang program-program di atas, langsung saja, ahem… RTFM, maksud saya baca manual masing-masing program dengan ketik perintah man <program>.
+
+misalnya untuk program mkdir:
+
+man mkdir
+
+Kita lanjut lagi di tulisan berikutnya dengan program-program yang lain, Insya Allah.
