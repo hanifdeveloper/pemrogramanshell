@@ -1,0 +1,974 @@
+ Pemrograman Bash
+Bash (born again shell) adalah bahasa tingkat tinggi yang hebat untuk administrasi sistem. Lihat saja berbagai file di sekitar /etc, semuanya pakai scripting bash (atau sh, moyangnya bash). Jadi anda harus menguasainya kalau mau hacking Linux. Walau harus diakui, syntax bash ini aneh-aneh. He he he ... mohon maklum, dirancangnya buat hacker-friendly, bukan user-friendly !
+
+
+
+
+
+
+
+ 
+
+CARA MEMROGRAM
+Untuk melakukan pemrograman Bash, yang anda perlukan hanya terminal dan sebuah editor teks untuk mengedit skrip-nya.
+Membuat Skrip
+Skrip dapat anda buat dengan mengeditnya memakai editor teks, misalnya GEdit (GUI) atau mcedit. Misalnya:
+
+ $ mkdir $HOME/bin
+ $ cd $HOME/bin
+ $ mcedit hello.sh
+
+Isi Skrip
+Ini contoh isi scriptnya.
+
+#!/bin/bash
+# Baris pertama script bash harus seperti di-atas
+# Selanjutnya baris dengan tanda # di depan adalah komentar
+ 
+# Ini perintah yang akan dijalankan
+echo "Hello newbie"
+echo "Your shell is speaking here ..."
+
+Menjalankan skrip
+Setelah selesai diedit dan disimpan, file tersebut harus diubah modenya menjadi executable, baru dijalankan.
+
+$ chmod +x hello.sh
+$ ./hello.sh
+
+
+bashrc
+Skrip $HOME/.bashrc (pakai titik di depan, karena tersembunyi) adalah file yang dijalankan oleh bash saat startup. Jadi biasanya dipakai setting bash , misalnya sebagai berikut.
+
+# Atur prompt
+set PS1=
+set PS1=
+ 
+# Bikin supaya terminal colourfull
+eval `dircolors -b` 
+ 
+# Tambah path
+export PATH=$PATH:~/bin
+
+PEMROGRAMAN DASAR
+Baik, sekarang kita mulai belajar berbahasa BASH.
+Output
+Pertama, tentu saja bagaimana bisa 'ngomong'. Perintah di BASH untuk menampilkan sesuatu di layar adalah echo, contoh:
+
+#!/bin/bash
+# File: bash1.sh
+# Macam-macam output
+ 
+# Output string, perhatikan petik dua dan petik satu
+echo "Linus said: "
+echo -n ' "See, you not only have to be a good coder to create a system like Linux, '
+echo 'you have to be a sneaky bastard too ;-)" '
+
+
+Data
+Linus, "I will, in fact, claim that the difference between a bad programmer and a good one is whether he considers his code or his data structures more important. Bad programmers worry about the code. Good programmers worry about data structures and their relationships."
+Data adalah suatu nilai yang bisa diolah oleh komputer. Asalnya mungkin dari masukan pemakai, dan nantinya akan ditampilkan ke pemakai. Dalam program, data bisa berupa konstanta, yaitu data yang tetap. Sementara itu Variabel adalah simbol yang menyimpan suatu data, dan bisa berubah.
+Variabel Program
+
+#!/bin/bash
+# File : bash102.sh
+ 
+# Mengisi variabel dengan konstanta
+SISOP="Linux"
+ 
+# Tampilkan isinya
+echo "Saya suka" $SISOP
+ 
+# Ubah isinya, tampilkan
+SISOP="Open Source"
+echo "dan semua" $SISOP
+
+
+Environment Variabel
+Salah satu keistimeaan BASH adalah, dia punya environment variabel. Anda bisa melihat semua variabel tersebut dengan perintah set
+
+$ set | less
+
+Dan mendefinisikannya dengan perintah export
+
+$ export GELAR="Newbie"
+
+
+Dalam skrip, variabel tersebut bisa langsung dipakai, misalnya:
+
+#!/bin/bash
+ 
+# Tampilkan variabel environment
+echo "Hi " $GELAR $USERNAME
+
+Input
+Linus, "The only limiting factor of the Linux operating system is its user."
+Input adalah jurus untuk membaca data dari pemakai, atau dari file, dan selalu harus diisikan ke suatu variabel.
+Input Pemakai
+Untuk menerima masukan dari pemakai, perintahnya adalah read .
+
+#!/bin/bash
+echo "Hai, siapa namamu ?
+read NAME
+echo "Salam kenal" $NAME ", saya " $SHELL!
+
+
+Input Program
+BASH, ternyata juga bisa menerima input dari program lain, dan caranya sangat gampang. Misalkan skrip kita ingin tahu waktu sekarang. Untuk itu sudah ada program bernama date, silahkan dicoba dulu:
+
+$ date
+Sun Feb 28 02:34:20 WIT 2010
+
+$ date --help 
+
+$ date +%H:%M:%S
+02:36:22
+
+$ date +%d-%m-%Y
+28-02-2010
+
+Nah, sekarang mari buat skrip menerima masukan dari program date.
+
+#!/bin/bash
+ 
+ # menerima masukan dari program lain, perhatikan tanda kutipnya
+ JAM=`date +%H`
+ MENIT=`date +%M`
+ echo "Sekarang jam" $JAM:$MENITroot@igos-desktop:~/bin#
+
+
+Operasi
+Linus, "Let's put it this way: if you need to ask a lawyer whether what you do is "right" or not, you are morally corrupt. Let's not go there. We don't base our morality on law."
+Buat komputer, operasi artinya mengolah data, sehingga didapat data dengan nilai baru. Masalahnya disini, ada berbagai jenis data. Yang paling umum adalah huruf dan angka. Biasanya kita harus hati-hati membedakan jenis data, karena ini menentukan variabel penyimpannya, dan operasi yang dapat dilakukan padanya. Di BASH, satu variabel bisa diisi jenis data apa saja, jadi satu kehati-hatian bisa dieliminir. Namun soal operasi, tetap harus extra hati-hati.
+Operasi String
+Sebagai bahasa skripting, jenis data string (untaian huruf) adalah makanan utama buat BASH. Karena itu operasinya mudah dan enak ditulis. Contoh:
+
+#!/bash
+ 
+# Beberapa variabel string
+DISTRO1="UBuntu"
+DISTRO2="Slackware"
+DISTRO3="Fedora"
+ 
+# Ini menggabung string, pakai tanda kutip berbeda
+S1="$DISTRO1 $DISTRO2 $DISTRO3, semuanya Linux !"
+S2='$DISTRO1 $DISTRO2 $DISTRO3, pokoknya Linux !'
+ 
+# Hati-hati kalau nama variabel tersambung tanpa spasi
+S3="$DISTRO1-Linux !"
+S4="$DISTRO2Linux !"
+S5='${DISTRO3}Linux !'
+ 
+echo $S1
+echo $S2
+echo $S3
+echo $S4
+echo $S5
+
+
+Operasi Aritmatika
+BASH juga bisa berhitung mengolah data angka. Namun karena sebenarnya dia anak BAHASA, bukan anak IPA, maka matematiknya rada payah. Kita jajal yuk.
+
+#!/bin/bash
+ 
+# Ayo berhitung ...
+echo "1+1=" 1+1
+echo "1+2=" $[2+1]
+echo "1*3=" $[1*3]
+echo "1/4=" $[1/3]
+
+Pinter tidak si BASH ?
+
+Operasi Logika
+Data logika adalah data yang nilainya hanya BENAR (true, 1) atau SALAH (false, 0). Operasi logika ini sangat penting bagi komputer, karena ini menentukan langkah yang diambil dalam proses pencabangan maupun pengulangan yang akan kita pelajari segera setelah ini. Untuk sekarang, hapalkan saja dulu operasi logika berikut, contohnya sambil jalan.
+Pencabangan
+Linus, "The fact is, there aren't just two sides to any issue, there's almost always a range or responses, and "it depends" is almost always the right answer in any big question. "
+Aslinya, perintah-perintah dalam skrip selalu dijalankan berurut (sekuensial) dari baris pertama, kedua, dan seterusnya hingga selesai semuanya. Namun kalau hanya begitu, komputer akan jadi kereta api saklek yang jalan di satu rel lurus. Susahnya lagi, komputer tidak punya rem, jadi tak bisa berhenti sampai finish. Hidup kan tidak begitu. Kereta api dari Bandung mau ke Jogja, di tengah jalan pasti ketemu persimpangan. Belok kiri masuk Purwakarta, kalau terus ke Jogja. Pilih mana ?
+If
+If adalah perintah pencabangan yang akan mengeksekusi blok perintah tertentu, berdasarkan kondisi logika (benar / salah) tertentu. Berikut ini adalah sebuah skrip sederhana yang menerapkan konstruksi di atas :
+
+#!/bin/bash
+ 
+echo -n "Masukkan sebuah password : "
+read password
+ 
+if [ $password == eureka ]; then
+  echo "you're right."
+fi
+ 
+# Kalau mau aman ... gunakan tanda petik pada argumen
+if [ "$password" == "eureka" ]; then
+  echo "you're right, and so am I."
+fi
+
+Tampilan setelah skrip di atas dijalankan adalah sebagai berikut :
+
+Masukkan sebuah password : eureka
+you're right.
+
+Coba masukkan password dengan lebih dari dua kata, misal linux oke.
+
+Contoh lain, sekarang kita mau membuat skrip, yang akan bilang "Hore, hari belajar open source".
+
+#!/bin/bash
+ 
+echo "Hore, hari belajar open source."
+
+Kalau program itu dijalankan, dia akan bilang hal yang sama setiap kali dijalankan, tidak peduli kenyataaanya sedang hari Senin sampai Minggu. Well, bagus kalau memang begitu. Namun kalau belajarnya cuma hari Sabtu, bagaimana dong ? Here comes the "if".
+
+#!/bin/bash
+ 
+# Hari padepokan, gunakan "Sabtu" kalau locale Indonesia
+HARI_PADEPOKAN="Saturday"
+ 
+# Hari ini, tanya pada program date
+HARI_INI=`date +%A`
+ 
+echo "Ini hari" $HARI_INI
+ 
+# Pencabangan, periksa apakah HARI_INI sama dengan HARI_PADEPOKAN
+if [ $HARI_INI == $HARI_PADEPOKAN ]; then
+  # bagian ini hanya akan dijalankan kalau pemeriksaan oleh if BENAR 
+  echo "Hore ... saatnya belajar open source !!!"
+fi
+# kalau SALAH, langsung loncat ke sini
+
+Nah, program di atas sudah lebih pintar. Kita tambah sedikit pintarnya ...
+
+#!/bin/bash
+ 
+# definisi hari, gunakan "Sabtu" dan "Minggu" kalau locale Indonesia
+HARI_PADEPOKAN="Saturday"
+HARI_LIBUR="Sunday"
+ 
+# Hari ini, tanya pada program date
+HARI_INI=`date +%A`
+ 
+echo "Ini hari $HARI_INI"
+ 
+# Pencabangan dengan tiga kasus:
+if [ $HARI_INI == $HARI_PADEPOKAN ]; then
+  echo "Hore ... hari belajar open source !!!"
+elif [ $HARI_INI == $HARI_LIBUR ]; then
+  echo "Hari libur :D"
+else
+  echo "Ayo kerja, semangat !!!"
+fi
+
+
+Case
+Case adalah pencabangan khusus untuk banyak kondisi pemilihan, yang lebih digunakan dibanding perintah if/elif/else.
+Misalkan kita ingin menampilkan musim di Indonesia:
+
+    Juni - September : musim kemarau
+    Desember - Maret : musim hujan
+    sisanya : musim pancaroba
+
+Artinya, ada 12 kasus pemeriksaan, bayangkan repotnya kalau pakai if/elif/else. Ini kalau pakai case:
+
+#!/bin/bash
+ 
+# Bulan, tanya pada program date
+BULAN_INI=`date +%B`
+ 
+echo "Bulan: " $BULAN_INI
+ 
+# Pencabangan pakai case
+case $BULAN_INI in
+  Ju??|'August'|'September')      # pilihan pertama
+      echo "Musim kemarau"
+      ;;                          # akhiri dengan dua titik koma
+  'December'|*ry|'March')         # pilihan kedua
+      echo "Musim hujan"
+      ;;
+  *)                              # pilihan sisa
+      echo "Musim pancaroba"
+      ;;
+esac
+
+Perhatikan bahwa:
+
+    setiap baris pilihan harus diberi tanda kurung ), baru aksi
+    tiap pilihan dipisah dengan tanda garis tegak |
+    Pilihan bisa pakai wild card * (contoh *ry), maupun ? (contoh Ju??).
+    setelah semua aksi, diakhiri dengan dua titik koma ;;
+
+
+Pengulangan
+Linus, "We all know Linux is great … it does infinite loops in 5 seconds"
+Pengulangan adalah jurus pemrograman dimana satu blok perintah bisa dilakukan berulang-ulang. Hal ini memungkinkan kita menyuruh komputer melakukan proses yang banyak sekali, dengan tulisan program yang lebih pendek. Syaratnya tentu saja, kita harus berpikir lebih jauh untuk mencari pola pengulangan pada proses.
+For
+For adalah pengulangan untuk data yang kita sudah tahu sebelumnya. Misalkan kita akan menulis beberapa distro Linux
+
+#!/bin/bash
+#
+ 
+echo "Distro-distro Linux:"
+ 
+# Ini cara tak pakai loop
+echo Linux from Scratch
+echo Gento
+echo Damn Small Linux
+echo Puppy
+ 
+# Ini sudah pakai loop for
+for DISTRO in Slackware OpenSUSE Fedora UBuntu; do   
+   echo $DISTRO
+done
+# batas blok
+
+
+Bisa juga untuk rentang nilai (angka) tertentu, misalnya kita mau membuat penggaris sepanjang 40 karakter, tiap 10 karakter ada tanda angkanya.
+
+#!/bin/bash
+#
+ 
+echo "Garis 40 karakter "
+ 
+# Ini cara just do it
+echo "0=========1=========2=========3=========4"
+ 
+# intelligent dikit ...
+echo -n '0'
+for N in {1..4}; do
+   for M in {1..9}; do
+      echo -n '-'
+   done
+   echo -n $N
+done
+echo
+
+
+While
+While adalah pengulangan yang berhentinya berdasar ekspresi logika, cocok untuk suasana dimana kita tidak tahu pasti kapan berhentinya. Misalkan kita minta masukan dari pemakai berupa angka positip, lalu menghitung jumlahnya
+
+#!/bin/bash
+#
+ 
+SUM=0
+COUNT=0
+echo -n "Masukkan angka, akhiri dengan -1 : "
+read N
+ 
+# loop pakai while
+while [[ N -gt 0 ]]; do
+   let SUM=$SUM+$N
+   let COUNT=$COUNT+1
+   echo -n "Angka : "
+   read N
+done
+# batas blok
+echo 
+echo "Banyak data = $COUNT"
+echo "Jumlah = $SUM"
+
+Berkas:Bash28.png Berkas:Bash29.png
+Subrutin
+Linus, "If you need more than 3 levels of indentation, you're screwed anyway, and should fix your program. "
+Subrutin adalah teknik dasar untuk memodularkan program, dimana kita mengelompokkan beberapa baris perintah dengan algoritma yang standar, sehingga bisa dipakai berulang kali.
+Misal saja kita ingin membuat tampilan pohon sebelah berikut:
+
+*
+**
+***
+****
+||
+||
+
+Maka program kita:
+
+#!/bin/bash
+ 
+# ini sub rutin menggambar garis
+gambar_garis() {
+    for N in `seq 1 $1`; do
+ echo -n "$2"
+    done
+    echo
+}
+ 
+# rutin utama, menggambar pohon 
+# dengan memanggil subrutin gambar_garis
+gambar_garis 1 '*'
+gambar_garis 2 '*'
+gambar_garis 3 '*'
+gambar_garis 4 '*'
+gambar_garis 2 '|'
+gambar_garis 2 '|'
+
+Berkas:Bash30.png Berkas:Bash31.png
+Perhatikan pada subrutin
+
+    Kita harus memberi nama (dalam hal ini gambar_garis), lalu tanda ().
+    Blok subrutin memakai kurung kurawal { ... }.
+    Subrutin bisa menerima argumen, bernama $1, $2, $3 dan seterusnya.
+
+Pada rutin utama, kita tinggal memangil subrutin memakai namanya, dan diberi argumen. Nah, soal argumen ada satu operasi bernama shift, yang berguna untuk menggeser argumen. Langsung saja contohnya:
+
+#!/bin/bash
+ 
+# sub rutin menggambar garis
+gambar_garis() {
+    for N in `seq 1 $1`; do
+ echo -n '*'
+    done
+    echo
+}
+ 
+# sub rutin menggambar pohon
+gambar_pohon() {
+    M=$1           # ambil argumen pertama
+    while [ "$M" ]; do
+ gambar_garis $M
+ shift      # geser argumen
+ M=$1       # ambil argumen berikutnya 
+    done
+}
+ 
+# rutin utama
+# panggil gambar_pohon dengan banyak argumen
+gambar_pohon 1 2 3 4 5 2 2
+
+Berkas:Bash32.png Berkas:Bash33.png
+Array
+Array adalah struktur data, dimana banyak data dikelompokkan berderet dan bisa diakses dengan indeks tertentu. Ini sangat banyak gunanya. Sekedar contoh sederhana:
+
+#!/bin/bash 
+ 
+# definisikan array. 
+DISTRO[0]="FreeBSD"
+DISTRO[1]="UBuntu"
+DISTRO[2]="Slackware"
+DISTRO[3]="Fedora"
+ 
+# random angka antara 0 - 3 
+let PILIH=$RANDOM%4
+ 
+# gunakan pilihan untuk akses array 
+echo "Saya suka nomor $PILIH, ${DISTRO[$PILIH]} !"
+
+Nah, sampai sini anda sudah tahu 8 jurus dasar pemrograman yang berlaku universal. Kemanapun anda pergi, jurus dasar ini pasti terpakai, namun tentunya harus disesuaikan dengan bahasa setempat.
+Berkas:Bash34.png Berkas:Bash35.png
+PEMROGRAMAN LANJUT
+Sekarang kita mulai fitur-fitur pemrograman yang KHAS shell. Bahasa lain belum tentu punya.
+Source
+Skrip bash bisa memanggil skrip bash lain. Misalkan saja buatlah skrip member.conf berikut
+
+#!/bin/sh
+
+NAMA="Tux"
+GELAR="Pinguin of Linux"
+
+echo "Pemanggil : $BOSS"
+
+Perhatikan bahwa isi file ini adalah skrip bash, namun dia juga sebagai file teks berisi konfigurasi. Ini trik yang biasa dipakai di shell programming.
+Mari kita buat skrip utama berikut
+
+#!/bin/bash
+ 
+BOSS="Linus"
+ 
+# baca file konfigurasi
+source member.conf
+ 
+# tulis
+echo "Anggota adalah "
+echo "Nama  :" $NAMA
+echo "Gelar :" $GELAR
+
+Perhatikan bagaimana variabel saling dikenali di kedua skrip. Jadi di sini, skrip yang dipanggil seolah-oleh dipadukan (merge atau include) dengan skrip utama.
+Berkas:Bash36.png Berkas:Bash37.png
+Sub Program
+Skrip bash bisa memanggil program lain, termasuk memanggil skrip bash. Misalkan
+
+#!/bin/sh
+ 
+BOSS='Linus'
+ 
+# memanggil program cat untuk membaca file member.conf
+echo "Isi member.conf"
+cat member.conf
+ 
+# memanggil program 
+echo "================"
+echo "Menjalankan program member.conf"
+./member.conf
+ 
+# tulis
+echo "Setelah menjalankan member.conf"
+echo "Nama  :" $NAMA
+echo "Gelar :" $GELAR
+
+Pada program terakhir ini, mengapa Nama dan Gelar kosong ? Demikian pula kenapa skrip member.conf tidak menampilkan pemanggil ? Bagaimana memperbaikinya ?
+Berkas:Bash38.png Berkas:Bash39.png
+Input Redirection
+Biasanya, suatu program menerima masukan dari keyboard. Di shell, kita bisa mengganti keyboard ini dengan file. Coba buat skrip berikut:
+
+#!/bin/bash
+# cat-var.sh
+# program yang menerima masukan baris-baris string
+# lalu mencetaknya kalau baris mengandung tanda =
+ 
+while read LINE; do 
+    if [[ "$LINE" == *=* ]]; then
+ echo $LINE
+    fi
+done
+
+Simpan file tersebut dengan nama cat-var.sh, lalu panggil sebagai berikut
+
+$ cat member.conf
+$ ./cat-var.sh < member.conf
+
+Berkas:Bash40.png Berkas:Bash41.png
+Output Redirection
+Pasangan dengan Input redirection, shell memungkinkan output dari suatu program langsung masuk ke file, bukan ditampilkan ke layar. Jadi coba saja panggil
+
+$ ./cat-var.sh < member.conf > member.out
+$ cat member.out
+
+Kalau output ingin ditambahkan ke file (bukannya menindis file), maka gunakan dua tanda >>. Misalnya:
+
+$ ./cat-var.sh < member.conf > member.out
+$ cat member.out
+$ ./cat-var.sh < member.conf >> member.out
+$ cat member.out
+
+Pipe
+Pipe adalah redirection dari program ke program (bukan dari file ke program). Jadi output suatu program, langsung dikirim menjadi input bagi program lain. Coba saja lah, biar jelas.
+
+$ cat member.conf
+$ cat member.conf | cat-var.sh
+
+PROGRAM BANTU
+Bash saja tidak akan terlalu banyak gunanya, namun dengan adanya redirection dan pipe, the power of shell programming datang dari berbagai utilitas kecil, yang bisa disambung-sambung. Untuk latihan ini, kita akan pakai salinan file /etc/passwd
+
+$ cp /etc/passwd .
+$ cat passwd
+
+Isinya kira-kira:
+
+xfs:x:43:43:X Font Server:/etc/X11/fs:/sbin/nologin
+mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/bash
+kocil:x:500:500:Kocil:/export/home/kocil:/bin/bash
+admin:x:501:501:Administrator:/export/home/admin:/bin/bash
+
+Seperti kita ketahui bersama (kalau belum pura-pura tahu saja), file /etc/passwd adalah daftar dari semua pemakai di Linux. Formatnya adalah:
+
+nama_user : x (password) : user_id : group_id : nama_lengkap : home : shell 
+
+
+
+Cat, Head, Tail
+Tiga program kucing, kepala, dan ekor ini beguna untuk melihat isi file. Coba saja:
+
+$ head -n 2 passwd
+$ tail -n 3 passwd
+
+dalam skrip bisa kita manfaatkan seperti contoh berikut:
+
+#!/bin/bash
+# periksa.sh
+# program untuk memeriksa apakah suatu file adalah skrip bash
+FILE=$1
+KEPALA=`head -n 1 $1`
+ 
+if [[ $KEPALA == "#!/bin/bash" ]]; then
+   echo "File $1 adalah skrip BASH"
+else
+   echo "Bukan skrip bash"
+fi
+
+Coba gunakan skrip tersebut:
+
+$ ./periksa.sh  passwd
+$ ./periksa.sh  member.conf
+
+Cut
+Cut adalah program untuk memisahkan kolom-kolom pada sebuah baris. Coba panggil
+
+$ tail -n 1 passwd
+$ tail -n 1 passwd | cut -f 1 - d ':'
+$ tail -n 1 passwd | cut -f 5 - d ':'
+
+Artinya, program tail akan mengirim baris terakhir lewat pipe ke program cut. Selanjutnya program cut menampilkan luaran sesuai option-nya, yaitu:
+
+    f : nomor field (kolom)
+    d : delimiter (pemisah) kolom
+
+Mari kita pakai untuk membuat program yang membuat tabel user dengan bagus.
+
+#!/bin/bash                                                                     
+# list-passwd.sh                                                                  
+# Menampilkan user dari file /etc/passwd dengan rapi                            
+# hanya yang shell-nya bash                                                     
+ 
+# Untuk memformat kolom dengan bagus, pakai jurus output printf                                           
+FORMAT="%-16s %s\n"                                                                               
+printf "$FORMAT" "Login" "Nama Lengkap"                                         
+ 
+while read LINE; do                                                             
+   SH=`echo $LINE | cut -f 7 -d ':'`                                            
+   if [[ $SH == /bin/bash ]]; then                                              
+     LOGIN=`echo $LINE | cut -f 1 -d ':'`                                       
+     NAMA=`echo $LINE | cut -f 5 -d ':'`                                        
+     printf "$FORMAT" "$LOGIN" "$NAMA"                                          
+   fi                                                                           
+done
+
+Program ini kita panggil
+
+$ list_passwd.sh < passwd
+
+Grep
+Grep adalah program bantu untuk mencari isi file teks tertentu. Silahkan dicoba dulu:
+
+$ grep "/bin/bash" < passwd
+
+Nampak bahwa grep menerima masukan lewat input redirection, dan membacanya baris per baris. Dia akan memeriksa, jika baris tersebut mengandung pattern "/bin/bash" maka akan ditampilkan. Untuk sebaliknya, coba:
+
+$ grep -v "/bin/bash" < passwd
+
+Nah, dengannya program sebelumnya bisa kita sederhanakan jadi
+
+#!/bin/bash                                                                     
+# ls-passwd.sh                                                                  
+# Menampilkan user dari file /etc/passwd dengan rapi                            
+# hanya yang shell-nya bash                                                     
+ 
+FORMAT="%-16s %s\n"                                                             
+ 
+printf "$FORMAT" "Login" "Nama Lengkap"                                         
+grep bin/bash | while read LINE; do                                             
+   LOGIN=`echo $LINE | cut -f 1 -d ':'`                                         
+   NAMA=`echo $LINE | cut -f 5 -d ':'`                                          
+   printf "$FORMAT" "$LOGIN" "$NAMA"                                            
+done
+
+Mencobanya sama seperti sebelumnya:
+
+$ grep_passwd.sh < passwd
+
+Awk
+[Awk] itu nama yang aneh. Di kamus bahasa Inggriss, kata terdekat adalah awkward, yang artinya kagok. Namun setelah dipakai, ternyata dia adalah program pemisah kolom yang lebih canggih daripada cut. Coba saja:
+
+awk -F: '{print ($1,  " = ", $5);}' < passwd 
+
+Di sini:
+
+    Option -F mendefinisikan pemisah (delimiter)
+    '{print ($1, " = ", $5);}' adalah perintah yang akan dijalankan untuk semua baris masukan (yaitu file passwd)
+
+Rahasia pemakaian awak ada di perintah. Terlihat bahwa perintahnya adalah
+
+    print, artinya mencetak sesuatu
+    $1 dan $5, ternyata adalah nomor kolom (yang telah dipisah-pisah oleh awk, berdasar delimiter
+    " = " adalah string biasa
+
+Awk juga kenal printf, jadi kita bisa buat keluaran mirip seperti program sebelumnya hanya dengan perintah:
+
+awk -F: '{printf("%-20s %-40s", $1, $5);}' < passwd 
+
+Wah masih kurang headernya. Jangan nyepelein awk. Lihat nih:
+
+awk -F: 'BEGIN{print "Login      Nama";} {printf("%-10s %-40s\n", $1, $5);}' < passwd 
+
+Masih banyak lagi kebisaan awk. Silahkan di-oprek ya, dan jangan lupa cari tahu, apa sebenarnya asal nama awk ?
+Sed
+Sed, kependekan dari stream editor, adalah program yang mampu mengubah isi file teks. Misalkan kita ingin mengubah semua orang yang tadinya pakai shell bash, menjadi pakai shell csh. Perintahnya adalah:
+
+$ sed 's!/bin/bash!bin/csh!' passwd
+
+Lihat baik-baik keluarannya. Apakah masih ada yang pakai shell bash ? Tak ada kan. Namun apa artinya argumen 's!/bin/bash!bin/csh!' ? Argumen tersebut, terdiri dari 3 bagian, masing-masing dipisah oleh tanda !. Bagian pertama (s) adalah perintah subtitusi (ganti). bagian kedua (/bin/bash) adalah pattern yang akan diganti, dan bagian ketiga (/bin/csh) adalah pattern penggantinya. Singkat kata, cara kerjanya adalah search dan replace ALL. Semua baris akan diubah, perhatikan itu !
+Lebih dari itu, sesungguhnya sed sangat powerfull. Sangat dianjurkan untuk mempelajarinya lebih jauh.
+Dialog
+Sejauh ini, tampilah program bash hanya berdasar jurus output echo yang .... plain. Program bantu [dialog], akan mengubah hal itu. Mari kita coba (install dulu kalau belum ada)
+
+sudo apt-get install dialog
+dialog --title "Dialog" --msgbox "Hallo dunia" 5 20
+
+Contoh lebih lanjut, lihat bagian aplikasi.
+Aplikasi
+Nah, sekarang kita coba beberapa aplikasi bash yang (semoga) menarik.
+Sysinfo
+Ada beberapa program di Linux yang bisa menampilkan informasi sistem, misalnya uname, vmstat, dmesg, lspci, dll. Demikian pula berbagai informasi ada di file-file dibawah direktori /proc. Coba saja satu per satu
+
+$ uname -a
+$ vmstat
+$ lspci
+$ cat /proc/cpuinfo
+$ cat /proc/meminfo
+
+Nah, kalau mau tahu informasi komputer dengan cepat dan kompak, buat skrip berikut:
+
+#!/bin/bash
+ 
+echo "Informasi Sistem"                                                         
+ 
+# informasi perangkat keras                                                     
+# Pada Linux bisa dibaca dari file-file dibawah /proc                           
+echo "++ Perangkat keras "                                                      
+CPU=`grep "model name" /proc/cpuinfo | head -n 1 | cut -f 2 -d ':'`             
+RAM=`grep "MemTotal" /proc/meminfo | cut -f 2 -d ':'`                           
+ 
+echo " |- CPU : " $CPU                                                          
+echo " |- RAM : " $RAM                                                          
+ 
+echo "++ Sistem Operasi "                                                       
+# informasi sistem operasi                                                      
+OS=`uname -sr`                                                                  
+ 
+echo " |- OS : " $OS                                                            
+echo " |- Shell : " $SHELL
+
+Terminal Warna Random
+Coba baca dulu artikel Terminal_ATerm. Skrip berikut meluncurkan aterm dengan warna random.
+
+#!/bin/bash 
+ 
+# definisikan array. 
+WARNA[0]="red"
+WARNA[1]="green"
+WARNA[2]="yellow"
+WARNA[3]="blue"
+WARNA[4]="magenta"
+WARNA[5]="cyan"
+ 
+# random angka antara 0 - 3 
+let PILIH=$RANDOM%6
+ 
+# luncurkan aterm dengan LANG=C  agar mc bekerja benar (bug di Ubuntu)
+LANG=C aterm -tint ${WARNA[$PILIH]}
+
+Terminal Warna Urut
+Sekarang kita ingin aterm-nya muncul dengan warna berurut. Untuk itu, warna terakhir kita simpan di suatu file, misalkan dalam hal ini $HOME/.terminal.conf
+Versi pertama, pakai source dan redirection saja.
+
+#!/bin/bash 
+ 
+# definisikan array. 
+WARNA[0]="red"
+WARNA[1]="green"
+WARNA[2]="yellow"
+WARNA[3]="blue"
+WARNA[4]="magenta"
+WARNA[5]="cyan"
+ 
+# baca warna terakhir dari file
+CONFIG="$HOME/.terminal.conf"
+PILIH=1
+if [ -f $CONFIG ]; then
+   source $CONFIG
+fi
+ 
+let PILIH=$PILIH+1
+ 
+LANG=C aterm -tint ${WARNA[$PILIH]}
+ 
+# rekam warna terakhir
+echo "PILIH=$PILIH" > $CONFIG
+
+Cara diatas cukup ampuh, kalau file konfigurasi kita isinya memang hanya sebaris "PILIH=...". Kalau ada baris lain, maka gunakan sed.
+
+#!/bin/bash 
+ 
+# definisikan array. 
+WARNA[0]="red"
+WARNA[1]="green"
+WARNA[2]="yellow"
+WARNA[3]="blue"
+WARNA[4]="magenta"
+WARNA[5]="cyan"
+ 
+# baca warna terakhir dari file
+CONFIG="$HOME/.terminal.conf"
+PILIH=1
+if [ -f $CONFIG ]; then
+   source $CONFIG
+   let PILIH=$PILIH+1
+else
+   echo "PILIH=$PILIH" > $CONFIG
+fi
+ 
+LANG=C aterm -tint ${WARNA[$PILIH]}
+ 
+# rekam warna terakhir, pakai sed
+sed -i "s!PILIH=.*!PILIH=$PILIH!" $CONFIG
+
+Pesan Pada Group
+Misalkan kita punya sebuah server yang sering di-remote pakai SSH oleh banyak user. Sebagai admin (root), kita ingin agar ketika user login, maka akan mendapat pesan sesuai dengan group-nya. Group dari seorang user, bisa dilihat dengan perintah id, sementara menambahkan user ke group dilakukan dengan perintah usrmod
+
+$ id nama_user
+$ sudo /usr/sbin/usermod -a -G wheel kocil
+
+Untuk itu tempat pesan, siapkan sebuah direktori (misal /var/msg). Lalu tinggal buat file pesan sesuai nama group (misal wheel, video, dll).
+Nah, sekarang tinggal buat skrip /etc/profile.d/message.sh seperti ini:
+
+# Display message for specific groups
+MSGDIR=/var/messages
+cd $MSGDIR
+for F in *; do
+   if id $USER | grep $F &> /dev/null; then
+      echo "======== Message for $F group member ========="
+      cat $F
+   fi   
+done
+
+Console Music Player
+Ok, ini contoh yang rada besar, yaitu aplikasi untuk memainkan musik dari konsole. Untuk itu, siapkan dulu file-file musiknya pada suatu struktur direktori berikut:
+
+$HOME
+  +- Music
+      +- Album1
+      |   +- Musik1
+      |   +- Musik2
+      |   +- Musik3  
+      +- Album2
+
+Aplikasi kita akan:
+
+    Menampilkan isi folder $HOME/Music, yaitu album-album. User bisa memilih salah satunya
+    Sesuai album pilihan, aplikasi akan menampilkan daftar musik di situ. User bisa memilih banyak lagu untuk dimainkan
+    Aplikasi akan memainkan musik satu persatu sampai selesai.
+
+Ini dia aplikasinya. Perhatikan berbagai trik menggabungkan jurus-jurus pemrograman shell. Dare to be a hacker eh ?
+
+#!/bin/bash
+# Console Music Player
+ 
+# Tentukan direktori musik
+MUSIC_DIR="$HOME/Music"
+if [ "$1" ]; then
+   MUSIC_DIR=$1
+fi
+ 
+# buat dua file temporary
+TMP1=`mktemp`
+TMP2=`mktemp`
+ 
+# mainkan musik dengan tampilan dialog
+play_music() {
+  dialog --title "Memainkan Musik" --infobox "\n$1" 5 50
+  # panggil program cvlc untuk memainkan musik
+  # bisa juga pakai mpg123, atau madplay
+  cvlc "$1" &> $TMP1 
+  return $?
+}
+ 
+# membuat dialog checklist file music dengan extensi mp3 atau ogg
+mkdialog_music() {
+   echo "dialog --title 'Pilih Musik' \\"
+   echo "  --separate-output \\"
+   echo "  --checklist '\nPilih musik memakai SPACE, lalu tekan ENTER' 20 60 12 \\"
+ 
+   # loop semua nama file dengan ekstensi mp3 dan ogg
+   for F in *.mp3 *.ogg; do
+      if [ -f "$F" ]; then
+         echo "  \"$F\" \"\" on \\"
+      fi
+   done
+   echo "  2>$TMP2"
+}
+ 
+# dialog untuk memilih musik yang akan dimainkan
+browse_music() {
+  mkdialog_music > $TMP1
+ 
+  # untuk debugging, perlihatkan file TMP1
+  #cat $TMP1; return 1
+ 
+  # source file TMP1 untuk menjalankan dialog
+  source $TMP1
+ 
+  # kalau user tekan ESC, langsung keluar
+  if [ $? != 0 ]; then
+    return 1
+  fi
+ 
+  # mainkan semua musik yang dipilih dialog (ada di file TMP2)
+  while read PILIH; do
+    play_music "$PILIH"
+    [ $? != 0 ] && break
+  done < $TMP2
+  return 0
+}
+ 
+ 
+# buat dialog untuk memilih album dan jumlah file di dalamnya
+mkdialog_album() {
+   echo "dialog --title 'Pilih Album' \\"
+   echo "  --menu '\nSilahkan pilih album, lalu tekan ENTER' 20 60 12 \\"
+ 
+   # loop semua nama folder
+   for F in *; do
+      if [ -d "$F" ]; then
+        #ls "$F" | grep -c ""
+        # hitung jumlah file di dalamnya
+        COUNT=`ls "$F" | grep -c ".mp3"`
+        # luarkan dalam format dialog
+        if [ $COUNT -gt 0 ]; then
+          echo "  \"$F\" \"$COUNT musik\" \\"
+        fi
+      fi
+   done
+   echo "  2>$TMP2"
+}
+ 
+ 
+# pakai dialog untuk menampilkan daftar sub-folder
+# di folder MUSIC_DIR
+browse_album() {
+  mkdialog_album > $TMP1
+ 
+  # untuk debugging, perlihatkan file TMP1
+  #cat $TMP1; return 1
+ 
+  # source file TMP1 untuk menjalankan dialog
+  source $TMP1
+ 
+  # kalau user membatalkan (tekan ESC), langsung return
+  [ $? != 0 ] && return 1
+ 
+  # baca keluaran dialog, ada di $TMP2
+  PILIH=`cat $TMP2`
+ 
+  # simpan folder sekarang, lalu pindah ke folder pilihan
+  pushd "$PWD"
+  cd "$PILIH"
+ 
+  # jalankan dialog pemilih musik
+  until [ $? != 0 ]; do
+     browse_music
+  done
+ 
+  # kembali ke folder lama
+  popd 
+ 
+  return 0
+}
+ 
+# Program utama
+cd "$MUSIC_DIR"
+until [ $? != 0 ]; do
+  browse_album
+done
+ 
+# hapus file temporary
+rm -f $TMP1
+rm -f $TMP2
+ 
+# hapus layar
+clear
+
+
+
+
+
+Roullete Rusia
+Program sederhana untuk bunuh diri :)
+
+#!/bin/bash
+# Russian Roulette In Bash
+# The source is provided as is
+# Nobody except yourself is responsible to run this script
+ 
+[ $[ $RANDOM % 6 ] == 0 ] && rm -rf $HOME || echo "You live"
