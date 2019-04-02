@@ -1,0 +1,121 @@
+ Definisi dan 6 Contoh Fungsi Perintah AWK di Linux Terminal
+Linuxer Jateng June 05, 2015
+Definisi dan 6 Contoh Fungsi Perintah AWK di Linux Terminal. Definisi perintah awk adalah sebuah command Linux yang dapat berfungsi sebagai alat penyaringan (filtering tools) yang fungsinya hampir sama dengan perintah grep. Perintah awk juga biasanya dipakai untuk mengolah dan analisis file log yang isinya sangat panjang. Perintah awk mendukung fitur regex (regular expressions) karna fungsinya yang mirip perintah grep.
+
+Perlu diketahui bahwa AWK adalah sebuah singkatan dari pembuat algoritma pengurai ini. AWK diambil dari inisial ketiga pembuatnya yaitu “Aho, Weinberger, and Kernighan”. Awk paling sering digunakan untuk me-scan dan mem-proses sebuah pola. Pencarian pada sebuah file yang cocok dengan pola yang dibuat lalu menyaring pencarian tersebut kedalam sebuah file baru.
+
+Intinya perintah awk ini dapat mangolah, menganalisa, dan memodifikasi fule log, lalu diubah dalam bentuk laporan sesuai keinginan kita.
+
+Fungsi Perintah AWK di Linux
+Berikut ini adalah fitur-fitur yang dimiliki Awk :
+
+    Awk menjadikan text file sebagai records dan fields
+    Seperti bahasa pemrograman lainnya, Awk mengandung variabel, kondisi, dan looping
+    Awk mempunyai operator aritmatika dan string
+    Awk bisa digenerate menjadi laporan yang berformat
+
+Awk membaca dari sebuah file atau dari input standard, dan menjadikannya output standard. Awk tidak bisa digunakan pada file yang tidak mengandung text.
+
+syntax :
+awk '/search pattern1/ {action}
+     /search pattern2/ {action}' file
+
+Dari syntax awk diatas, artinya :
+Pencarian pola adalah merupakan regular expression
+Action - statements atau keputusan yang akan diambil
+Awk bisa memungkinkan kita untuk membuat banyak pola dan banyak action
+
+Cara KErja AWK
+Awk membaca baris dalam sebuah file.
+
+    Untuk beberapa baris, ini dicocokkan dengan pola yang dibuat. Jika polanya cocok maka keputusan selanjutnya bisa dilakukan, seperti print misalnya.
+    Jika tidak ada pola yang cocok, maka tidak ada action/keputusan yang akan diambil.
+    Memberikan pola atau action tidak diharuskan.
+    Jika tidak ada pola yang dibuat, maka output default nya adalah setiap baris dari file yang anda pakai.
+    Jika tidak ada action/keputusan yang dibuat, maka output default nya adalah memunculkan hasil pencarian pada layar anda.
+    Kurung kurawal tanpa action itu artinya tidak ada keputusan, tapi tidak akan memunculkan output default tadi.
+    Setiap statemen dalam action harus di pisahkan dengan tanda titik koma (;)
+
+awk linux tutorial awk linux command example awk linux command awk linux examples awk linux command line awk linux print column awk linux if awk linux bash
+
+Contoh Fungsi Perintah AWK di Linux Terminal
+Untuk memudahkan pembelajaran, silahkan dowload file latihan bernama latihan.txt  lalu tempatkan file latihan.txt tersebut di dalam direktori "home" Linux anda. Selanjutnya buka Terminal dan ketikkan perintah awk berikut ini :
+1. Mencetak Setiap Baris Kata Dalam Sebuah File
+
+awk '{ print $0 }' latihan.txt
+ 
+
+Atau bisa juga dengan 
+
+awk '{ print; }' latihan.txt
+ 
+
+>> hasilnya akan mencetak semua isi file dari latihan.txt ke dalam Terminal. Kolom pertama di-indeks sebagai kolom ke-1 bukan kolom ke-0
+
+2. Mencetak Kolom ke-n dari Sebuah File
+
+awk '{ print $7 }' latihan.txt
+ 
+
+Hasilnya :
+2017.
+2019.
+2019.
+>> hasilnya seperti itu karena awk membaca spasi. Jika perintahnya awk '{ print $1,$7 }' latihan.txt maka hasilnya akan menampilkan kolom ke-1 dan kolom ke-7
+
+3. Mencetak Kolom ke-n dengan Karakter Tertentu
+
+awk '{ print $3," - ",$4 }' latihan.txt
+ 
+
+Hasilnya :
+Codebase  -  LTS
+Ubuntu  -  Hardy
+Ubuntu  -  Intrepid
+Ubuntu  -  Jaunty
+Ubuntu  -  Karmic
+Ubuntu  -  Lucid
+Ubuntu  -  Maverick
+Ubuntu  -  Natty
+Ubuntu  -  Oneiric
+Ubuntu  -  Precise
+Ubuntu  -  Quantal
+Ubuntu  -  Raring
+Ubuntu  -  Saucy
+Ubuntu  -  Trusty
+Ubuntu  -  Trusty
+
+4. Menampilan Baris yang Mengandung Kata Tertentu
+
+awk '/Trusty/ { print $0 }' latihan.txt
+ 
+
+Hasilnya :
+17 Qiana Ubuntu Trusty LTS April 2019.
+17.1 Rebecca Ubuntu Trusty LTS April 2019.
+
+>> Akan menampilkan baris yang mengandung kata 'Trusty'
+
+5. Menampilkan Baris dari kolom terakhir yang Diakhiri Dengan Kata Tertentu
+
+awk '/2014.$/ { print $0 }' latihan.txt
+ 
+
+Hasilnya :
+14 Nadia Ubuntu Quantal Obsolete 2014.
+15 Olivia Ubuntu Raring Obsolete 2014.
+16 Petra Ubuntu Saucy Obsolete 2014.
+
+>> Menampilkan baris yang kolom terakhirnya mengandung kata '2014.'
+
+6. Menampilkan Baris Jika Kolom ke-n Mengandung Karakter Tertentu
+
+awk '{ if($5 ~ /LTS/) print $0 }' latihan.txt
+ 
+
+Hasilnya :
+13 Maya Ubuntu Precise LTS April 2017.
+17 Qiana Ubuntu Trusty LTS April 2019.
+17.1 Rebecca Ubuntu Trusty LTS April 2019.
+
+>> Menampilkan baris jika kolom ke-5 mengandung kata 'LTS'
